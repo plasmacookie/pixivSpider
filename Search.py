@@ -24,10 +24,9 @@ class User(object):
         illust_ids = set()
         # 如果illusts不为空
         if illusts:
-            # 循环illusts，并将作品id构造成作品链接放入集合中
+            # 循环illusts，并将作品id放入集合中
             for illust in illusts:
-                illust_id = illust
-                illust_ids.add(illust_id)
+                illust_ids.add(illust)
         return illust_ids
 
 
@@ -85,7 +84,7 @@ class Tags(object):
 
     def get_illust_ids(self):
         # 线程总数
-        thread_count = 64
+        thread_count = 128
         # 总页数
         total_page = self.get_total_page()
         # 每个线程要爬取的页数

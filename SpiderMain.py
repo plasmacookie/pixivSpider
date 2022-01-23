@@ -3,13 +3,12 @@ from DataOutPut import DataOutPut
 from Search import User
 from Search import Tags
 import MultiThreadDownload
-# 默认下载路径，可修改
-file_path = 'E:/img_download/'
+
+file_path = '../img_download/'
 print('1.输入搜索内容，下载收藏人数大于输入值的所有图片')
 print('2.输入画师id，下载画师的所有插画作品')
 print('3.输入作品id，下载作品')
-print('选择您的下载方式')
-i = input()
+i = input('选择您的下载方式: ')
 if i == '1':
     # 通过数据构造目录
     tag = input('输入搜索内容: ')

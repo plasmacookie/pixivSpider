@@ -79,6 +79,9 @@ class DataOutPut(object):
         illust_id = resource[0]
         h = HTMLParser()
         t = h.get_ugoira_resource(illust_id)
+        if t is None:
+            self.static_download(resource, file_path)
+            return
         zip_file = t[0]
         delays = t[1]
         # 将压缩包下载到本地，获取压缩包名称

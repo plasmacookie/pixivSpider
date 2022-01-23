@@ -1,4 +1,4 @@
-# 用于获取页面资源
+# 用于获取页面的HTML
 from requests.adapters import HTTPAdapter
 import requests
 
@@ -15,7 +15,10 @@ class HTMLDownloader():
         s.keep_alive = False
         s.mount('http://', HTTPAdapter(max_retries=5))
         s.mount('https://', HTTPAdapter(max_retries=5))
-        resource = s.get(url=url, headers=headers)
+        try:
+            resource = s.get(url=url, headers=headers)
+        except Exception:
+            resource = HTMLDownloader.get_resource(url, headers)
         return resource
 
     def get_html(url):
@@ -35,6 +38,9 @@ class HTMLDownloader():
             'cookie': cookie
         }
         resource = HTMLDownloader.get_resource(url, headers)
+        # print(resource.headers)
+        # return resource.content
+
         # 验证图片完整性
         flag = False
         if 'Content-Length' in resource.headers:

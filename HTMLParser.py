@@ -38,5 +38,8 @@ class HTMLParser(object):
         url = 'https://www.pixiv.net/ajax/illust/' + str(id) + '/ugoira_meta?lang=zh'
         h = HTMLDownloader.get_html(url)
         j = json.loads(h)
-        body = j['body']
-        return body['originalSrc'], body['frames']
+        if j['error'] is True:
+            pass
+        else:
+            body = j['body']
+            return body['originalSrc'], body['frames']
