@@ -18,6 +18,7 @@ termux, python3.10
 4. 浏览器登录pixiv后复制cookie和ua粘贴到HTMLDownloader.py中
 5. 在SpiderMain.py中修改下载图片的默认路径
 6. python SpiderMain.py 运行程序
+7. 若遇到下载问题，请尝试将pixiv账号的r18与r18g开关打开
 
 # bug修复
 ## 22.1.23
