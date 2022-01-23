@@ -17,7 +17,7 @@ def download(illust_ids, min_count, file_path):
 def multi_download(illust_ids, min_count, file_path):
     # 多线程下载图片
     # 线程总数
-    thread_count = 16
+    thread_count = 64
     # id总数
     id_count = len(illust_ids)
     # 每个线程要分配的id数量

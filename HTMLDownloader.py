@@ -35,4 +35,15 @@ class HTMLDownloader():
             'cookie': cookie
         }
         resource = HTMLDownloader.get_resource(url, headers)
-        return resource.content
+        # 验证图片完整性
+        flag = False
+        if 'Content-Length' in resource.headers:
+            if int(resource.headers['Content-Length']) == len(resource.content):
+                flag = True
+            else:
+                flag = False
+
+        if 'Transfer-Encoding' in resource.headers or flag:
+            return resource.content
+        else:
+            return HTMLDownloader.get_content(id, url)
