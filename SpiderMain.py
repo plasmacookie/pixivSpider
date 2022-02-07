@@ -21,9 +21,10 @@ if i == '1':
     print('正在搜索ing...')
     tags = Tags(tag, mode)
     illust_ids = list(tags.get_illust_ids())
+    print('\n在该tag下获取到'+str(len(illust_ids))+'作品, 即将开始下载收藏数'+str(min_count)+'以上的作品')
     print('正在下载ing...')
     MultiThreadDownload.multi_download(illust_ids, min_count, path)
-    print('下载结束啦')
+    print('\n下载结束啦')
 elif i == '2':
     # 通过输入构造目录
     user_id = input('输入画师id: ')
@@ -34,9 +35,10 @@ elif i == '2':
     print('正在搜索ing...')
     user = User(user_id)
     illust_ids = list(user.get_illust_ids())
+    print('\n该画师共有'+str(len(illust_ids))+'作品, 即将开始下载画师'+str(user_id)+'的作品')
     print('正在下载ing...')
     MultiThreadDownload.multi_download(illust_ids, 0, path)
-    print('下载结束啦')
+    print('\n下载结束啦')
 elif i == '3':
     # 通过输入构造目录
     illust = input('输入作品id: ')

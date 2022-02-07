@@ -35,10 +35,11 @@ class Tags(object):
         # 初始化时传入要搜索的内容与限制级
         self.tag = tag
         self.mode = mode
+        self.count = 0
 
     def get_illust_count(self):
         # 使用tag和mode构造出能够获取总作品数的链接
-        url = 'https://www.pixiv.net/tags/' + self.tag + '/illustrations?mode=' + self.mode
+        url = 'https://www.pixiv.net/tags/' + self.tag + '/illustrations?mode=' + self.mode+'&s_mode=s_tag'
         # 获取搜索的作品总数
         h = HTMLDownloader.get_html(url)
         p1 = re.compile('\\d*件投稿されています')
@@ -61,8 +62,16 @@ class Tags(object):
             total_page = int(math.ceil(illust_count/60))
         return total_page
 
-    def get_one_illust_ids(self, p):
+    def get_one_illust_ids(self, p, total_page):
         # 获取某一页作品的id集合
+
+        self.count += 1
+        num = round(self.count/total_page*100, 2)
+        if num > 100:
+            print('\r搜索进度:100.0/100', end="")
+        else:
+            print('\r搜索进度:'+str(num)+'/100', end="")
+
         url = 'https://www.pixiv.net/ajax/search/illustrations/' + self.tag + '?mode=' + self.mode + '&p=' + str(p)
         h = HTMLDownloader.get_html(url)
         j = json.loads(h)
@@ -74,32 +83,38 @@ class Tags(object):
                 illust_ids.add(illust_id)
         return illust_ids
 
-    def add_ids(self, start, end, q):
+    def add_ids(self, start, end, q, total_page):
         # 将从start页到end页的数据存入队列q中
         illust_ids = set()
         for i in range(start, end):
-            ids = self.get_one_illust_ids(i+1)
+            ids = self.get_one_illust_ids(i+1, total_page)
             illust_ids = illust_ids.union(ids)
         q.put(illust_ids)
 
     def get_illust_ids(self):
-        # 线程总数
-        thread_count = 128
+        # 默认线程总数
+        t_count = 128
         # 总页数
         total_page = self.get_total_page()
+        # 设置线程数
+        if total_page < t_count:
+            thread_count = total_page
+        else:
+            thread_count = t_count
+
         # 每个线程要爬取的页数
         d = math.ceil(total_page/thread_count)
         # 声明队列
         q = Queue()
         # 声明线程列表
         threads = []
-        # 执行前31个线程
+        # 执行前127个线程
         for i in range(thread_count-1):
-            t = Thread(target=self.add_ids, args=(i*d, (i+1)*d, q))
+            t = Thread(target=self.add_ids, args=(i*d, (i+1)*d, q, total_page))
             threads.append(t)
             t.start()
         # 执行最后一个线程
-        t = Thread(target=self.add_ids, args=((thread_count-1)*d, total_page, q))
+        t = Thread(target=self.add_ids, args=((thread_count-1)*d, total_page, q, total_page))
         threads.append(t)
         t.start()
         for t in threads:

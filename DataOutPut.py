@@ -6,6 +6,8 @@ import imageio
 
 
 class DataOutPut(object):
+    def __init__(self):
+        self.count = 0
 
     def mkdir(self, file_path):
         # 创建文件夹
