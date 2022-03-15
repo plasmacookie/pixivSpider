@@ -35,7 +35,7 @@ elif i == '2':
     print('正在搜索ing...')
     user = User(user_id)
     illust_ids = list(user.get_illust_ids())
-    print('\n该画师共有'+str(len(illust_ids))+'作品, 即将开始下载画师'+str(user_id)+'的作品')
+    print('该画师共有'+str(len(illust_ids))+'作品, 即将开始下载画师'+str(user_id)+'的作品')
     print('正在下载ing...')
     MultiThreadDownload.multi_download(illust_ids, 0, path)
     print('\n下载结束啦')
